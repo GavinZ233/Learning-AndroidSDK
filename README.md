@@ -42,7 +42,7 @@ Preferences——>External Tools——>Android
 
 ## 1.2 发布设置
 
-### Android
+### 1. Android
 
 |名称|说明|作用|
 |--|--|--
@@ -65,7 +65,7 @@ Preferences——>External Tools——>Android
 
 
 
-### Player
+### 2. Player
 |名称|说明|作用|
 |--|--|--
 |Company Name|公司名称|
@@ -75,12 +75,81 @@ Preferences——>External Tools——>Android
 |Default Cursor|默认光标|替换游戏内光标
 |Cursor Hotspot|光标热点|光标实际触发点相对图片的坐标
 
-### Other Settings
+### 3. Icon
+|名称|说明|作用|
+|--|--|--
+|Adaptive(API 26)|Android8.0及以上版本的图标|在老版本的基础上加了背景图
+|Round(API 26)|Android7.1及以上版本的图标|
+|Legacy|Android7.1以下版本的图标|
+
+
+### 4. Resolution and Presentation
+|名称|说明|作用|
+|--|--|--
+|Fullscreen Mode|全屏模式|`Fullscreen Window`保持纵横比铺满屏幕，可能会有黑边，`Windowed`窗口模式，自定义分辨率
+|Resizable Window|可调整窗口大小|可在多窗口模式调整大小
+|`Hide Navigation Bar`|隐藏导航栏|隐藏顶部的系统导航信息，如：信号，电量等
+|`Render outside safe area`|渲染超出安全范围的屏幕|刘海屏的刘海区域也会被渲染
+|Optimized Frame Pacing|均匀分布帧|启用后会更流畅
+|Resolution Scaling Mode|分辨率缩放模式|有UI自适应不需要开启，`Fixed DPI`使用API应用分辨率，可优化性能和电池寿命
+|Reset resolution on window resize|重新设置分辨率|当开启分辨率缩放模式时，开启此选项，重新计算分辨率
+|Blit Type|光高类型|`Always`使用Blit渲染到设备的帧缓冲区，兼容性高速度慢  `Nerver`直接渲染到操作系统的帧缓冲区，兼容性低速度快 `Auto` 当直接渲染失败时使用Blit
+|`Aspect Ratio Mode`|应用程序支持的最大纵横比|超出纵横比时用黑条填充，`Legacy Wide Screen`传统宽屏宽高比 `Native Aspect Ratio` 本机宽高比 `Custom`自定义纵横比，在`Up To`设置比例
+|`Default Orientation`|默认屏幕取向|`Portrait` 竖屏 `Portrait Upside Down` 竖屏反向 `Landscape Right` 右侧横屏，设备底部是程序右侧 `Landscape Left` 左横屏 `Auto Rotation` 自动旋转，会多出四个方向的选择
+|Use 32-Bit Display Buffer|显示缓冲区保存32位颜色值|如果后处理出现条带效果或者需要Alpha值，启用32位颜色
+|Disable Depth and Stencil|深度和模板缓冲区|
+|Render Over Native UI|使用设备本机的UI渲染|一般不开启
+|Show Loading Indicator|显示加载指示器|一般采用自己写的进度条
+
+
+### 5. Splash Image
+|名称|说明|作用|
+|--|--|--
+|Virtual Really Splash Image|VR的初始屏幕图片|
+|Show Splash Screen|启动展示UnityLogo|付费版可以关闭UnityLogo
+|Splash Style|Logo风格|黑白两种选择
+|Animation|Logo动画|静态，动态，定制三种
+|Draw Mode|Logo绘制模式|Unity一直在下方和按顺序展示两种
+|Overlay Opacity|覆盖不透明度|
+|Background Color|背景颜色|
+|Blur Background Image|模糊背景图像|
+|Background Image|背景图片|
+|Alternate Portrait Image|备选图像|
+|Static Splash Image|静态启动图像|动态Logo关闭了才能看见，付费版
+
+
+### 6. OtherSettings-渲染相关
+|名称|说明|作用|
+|--|--|--
+|||
+|||
+|||
+
+### 7. OtherSettings-配置相关
+|名称|说明|作用|
+|--|--|--
+|||
+|||
+|||
+
+### 8. OtherSettings-其他
+|名称|说明|作用|
+|--|--|--
+|||
+|||
+|||
+
 
 Package Name 按照 `com.CompanyName.ProduckName`填写      
 Minimum APILevl 最低版本选择较低的版本，好兼容更多手机
 
 
+### 9. Publishing Settings
+|名称|说明|作用|
+|--|--|--
+|||
+|||
+|||
 
 
 
