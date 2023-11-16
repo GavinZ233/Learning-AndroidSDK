@@ -192,26 +192,60 @@ Preferences——>External Tools——>Android
 ### 7. OtherSettings-配置相关
 |名称|说明|作用|
 |--|--|--
-|||
-|||
-|||
+|**Identification**|身份证明|
+|`Override Default Package Name`|覆盖默认包名称|当公司名或游戏名不是英文时，需要在此处手动填写英文包名
+|`Package Name`|软件包名|相当于应用程序的ID，用于在设备和安卓应用商店中的唯一标识。格式：com.公司名.产品名。只能包含字母数字和下划线，每段都必须以字母开头
+|`Version`|版本|用于标识应用程序包的迭代,格式：1.3.4,用户可见
+|Bundle Version Code|内部版本号|确定一个版本是否比另一个版本新，数字越大表示版本越新。该值为整数，比如每次发布新版本时可以让数字加一。用户不可见
+|`Minimum API Level`|最低API级别|决定应用程序运行需要的最低的API级别，如果用户手机的SDK版本低于该设置，Android系统会阻止用户安装该应用程序
+|Target API Level|目标API级别|主要用于通知Android系统，我们已经针对目标版本进行了测试，并且系统不应该通过启用任何兼容性行为，以保持你的应用与目标版本的向前兼容性。应用程序一样可以在较低版本上运行（取决于Minimum API Level）
+|**Configuration**|配置相关|
+|`Scripting Backend`|脚本后端|切换`Mono`和`IL2CPP`
+|`Api Compatibility Level`|API兼容性级别| `.NET Standard 2.1`相对更小，具有完整的跨平台支持。 `.NET Framework`包含更多API支持，会生成更大的包。默认是2.1，如果使用C#高级功能遇到报错，尝试切换到.NET Framework
+|`C++ Compiler Configuration`|C++编译器配置|`Debug`将关闭所有优化，让代码生成速度更快，但运行速度较慢，可以在这种模式下进行调试 `Release`会对代码进行优化，编译后的代码运行会更快，二进制文件大小更小，但编译时间更长 `Master`可实现所有可能的优化，从而压缩每一点可能的优化，发布时间比发布模式还要长，如果接受较长的发布时间，建议在发布`最终版本时使用Master模式`
+|`Use incremental GC`|使用增量GC|启用后可以使用增量垃圾回收器，会`将GC分散到多个帧上执行`，避免在一帧中进行GC造成的卡顿
+|Assembly Version Validation|程序集版本验证|Mono验证强名称程序集的类型。是对程序集进行强命名，为程序集创建唯一标识，可以防止程序集冲突
+|`Mute Other Audio Sources`|其他音源静音|运行Unity应用程序时停止在后台运行的应用程序中的音频
+|Target Architectures|目标体系结构|允许应用程序允许的CPU，Mono模式只能选择ARMv7，IL2CPP模式可以选择更多的模式
+|Split APKs by target architecture|按目标架构拆分APK|启用后，可以为目标体系结构中选择的每个CPU架构创建单独的APK，这样在Google Play中为用户提供下载时，它会根据设备的情况下载对应版本的APK，可以让apk更小，用户下载更小的包。但是主要是针对`Google Play`，因此面向国内的产品几乎不会使用。
+|Target Devices|目标设备|`All Devices`（所有设备）：允许apk在所有Android和Chrome OS设备上运行。`Phones，Tablets，and TV Devices Only`（手机、平板、电视设备）：允许apk在Android手机和平板电脑、电视上运行，但是不能在Chrome OS设备上运行。`Chrome OS Devices Only`（Chrome OS设备）：允许apk在Chrome OS设备上运行，但是不能在Android手机、平板、电视上运行
+|Install Location|安装位置|`Automatic`：自动让操作系统决定，用户可以自己移动安装位置`Prefer External`：首选外部安装，如果可以，将应用程序安装到外部存储中（SD卡），如果不能，应用程序安装到手机存储空间中F`orce Internal`：强制内部，强制将应用程序安装到手机存储空间中，用户无法将应用程序移动到外部存储中安装
+|`Internet Access`|互联网接入|选择是否始终将网络权限添加到Android清单（即使你没有使用任何网路API）`Auto`：仅当使用了网络API时才会添加互联网访问权限`Require`：使用添加互联网访问权限
+|`Write Permission`|写入权限|是否启用对外部存储（SD卡）的写入访问权限，并向Android应用清单添加相应的权限`Internal`（内部）：仅授予对内部存储的写入权限`External`（外置SD卡）：启用对外部存储的写入权限
+|Filter Touches When Obscured|遮挡时过滤触摸|启用后可以丢弃在另一个可见窗口覆盖Unity应用程序时收到的触摸（触屏事件），可以放置窃听劫持
+|Sustained Performance Mode|持续性能模式|启用此选项可在较长的时间段内设置可预测且一致的设备性能级别，而无需进行热限制。启用此设置时，整体性能可能会降低
+|Low Accuracy Location|低精度定位|启用后可改为低精度值与Android位置API配合使用,降低消耗
+|Chrome OS Input Emulation|ChromeOS触摸板事件转触屏输入|默认行为是将鼠标和触摸板输入事件转为触屏输入事件。
+|Android TV Compatibility|安卓电视兼容性|`Android Game`：启用后可将输出的apk标记为游戏而不是常规应用。`Android Gamepad Support Level`：安卓游戏输入板支持等级。输入方式`D-pad`是遥控器
+|Warn about App Bundle size|警告应用程序包的大小|当应用程序包大小超过阈值时会受到警告。GooglePlay会限制包体大小
+|`Active Input Handling`|活动输入处理|选择使用新旧哪种输入系统
 
 ### 8. OtherSettings-脚本相关
 |名称|说明|作用|
 |--|--|--
-|||
-|||
-|||
+|`Scripting Define Symbols`|脚本定义符号|可以在此设置自定义编译标志。使用第三方内容有时会在此处添加脚本符号。比如：Lua热更需要添加`HOTFIX_ENABLE`,Lua代码中的某些逻辑会被启动
+|Additional Compiler Arguments|其它编译器参数|向此列表添加条目以将其他参数传递给 Roslyn 编译器。对每个附加参数使用一个新条目。要创建新条目，请按“+”按钮。要删除条目，请按“-”按钮。添加完所有所需参数后，单击“应用”按钮以在将来的编译中包括其他参数。“还原”按钮将此列表重置为最近应用的状态。
+|Suppress Common Warnings|禁止显示常见警告|以下两种: CS0169：从不使用私有字段，声明了私有变量，但是从没有使用。CS0649：编译器检测到从未分配值的未初始化的私有或内部字段声明
+|`Allow 'unsafe' Code`|允许使用“不安全”代码|启用对在预定义程序集中编译“unsafe”C# 代码的支持
+|Use Deterministic Compilation|使用确定性编译|启用此设置后，编译的程序集在每次编译时都是完全相同的。禁用此设置可防止使用 -确定性 C# 标志进行编译。确定性编译可用于确定二进制文件是否从受信任的源编译
+|Enable Roslyn Analyzers|启用Roslyn分析器|禁用此设置可编译用户编写的脚本，而无需项目中可能存在的 Roslyn 分析器 DLL（ Roslyn 就是微软的.Net开源编译器，编译器支持 C# 编译，并提供丰富的代码分析 API。）
 
 
-Package Name 按照 `com.CompanyName.ProduckName`填写      
-Minimum APILevl 最低版本选择较低的版本，好兼容更多手机
+#### 拓展知识
 
+##### unsafe 关键词
+
+默认情况下，C#是不支持 指针 的，unsafe 关键词用于在C#表示不安全的上下文，如果想要在C#中进行任何和指针相关的操作，就必须配合unsafe关键词使用。         
+在公共语言运行时（CLR）中，不安全代码是指无法验证的代码。         
+C# 中的不安全代码不一定是危险的，只是 CLR 无法验证该代码的安全性。因此，CLR 将仅执行完全信任的程序集中的不安全代码。          
+
+开启unsafe关键字：Player Settings==>Other Settings ==>Allow'unsafe'Code       
+
+>unsafe可以修饰类、成员变量、函数以及代码块。
 
 ### 9. OtherSettings-优化相关
 |名称|说明|作用|
 |--|--|--
-|||
 |||
 |||
 
@@ -224,6 +258,53 @@ Minimum APILevl 最低版本选择较低的版本，好兼容更多手机
 |||
 
 
+#### 拓展知识
+
+##### 1.  Android 中的签名
+Android要求所有已安装的应用程序都使用数字证书做数字签名，数字证书的私钥由应用开发者持有，Android使用证书作为标示应用程序作者的一种方式，并在应用程序之间建立信任的关系。 证书并不用来控制用户能否安装哪个应用。证书不需要由证书认证中心签名；完全可以使用自制签名证书。       
+没有正确签名的应用，Android系统不会安装或运行。此规则适用于在任何地方运行的Android系统，不管是在模拟器还是真实设备上。因为这个原因。在真机或模拟器上运行或者调试应用前，必须为其设置好签名。          
+>Android应用的包名就像名字，携带了信息，但有重复的可能性。而签名就像学号，具有唯一性，避免相同包名应用互相覆盖的情况
+
+
+
+##### 2. Android 应用程序清单
+ `AndroidManifest.xml` 配置文件主要用于声明应用程序的组件，并且还有以下的一些重要作用：
+
+1. 确定应用程序要求的用户权限，比如：网络访问、通讯录访问、信息读取等权限
+
+2. 声明应用程序要求的最低API Level
+
+3. 声明应用程序将要使用的或要求的硬件和软件特性，比如：摄像头访问、蓝牙服务、多点触碰等
+
+>安卓游戏使用一些系统功能或硬件访问权限时，都需要在该文件当中进行设置。
+
+
+ 
+##### 3. Gradle
+
+Gradle 是一个自动化构建开源工具，主要面向Java应用为主，也支持其它语言，比如C++、Kotlin、Swift，未来还会支持更多的语言。       
+
+它是一个基于`JVM`（Java虚拟机）的`构建工具`，是一款通用灵活的构建工具，也可以用于Android 项目的构建工作，它可以让安卓项目变得更加简洁。         
+
+在Unity中简单理解Gradle，它就是用于帮助我们打包出安卓应用程序 .apk 的一个工具，在Android Studio中也使用Gradle进行应用程序打包。           
+
+
+##### 4. ProGuard 和 R8
+
+1. ***代码混淆***  
+代码混淆(Obfuscated code)，是将计算机程序的代码，转换成一种功能上等价，但是难于阅读和理解的形式的行为。代码混淆主要用于程序源代码，也可以用于程序编译而成的中间代码。执行代码混淆的程序被称作代码混淆器。已经存在许多种功能各异的代码混淆器。         
+将代码中的各种元素，如变量，函数，类的名字改写成无意义的名字。比如改写成单个字母，或是简短的无意义字母组合，甚至改写成“__”这样的符号，使得阅读的人无法根据名字猜测其用途。重写代码中的部分逻辑，将其变成功能上等价，但是更难理解的形式。比如将for循环改写成while循环，将循环改写成递归，精简中间变量，等等。打乱代码的格式。比如删除空格，将多行代码挤到一行中，或者将一行代码断成多行等等。          
+代码混淆的主要目的是提升源代码的安全性，别人反编译你的应用程序代码后，增加他们阅读分析逻辑的难度。          
+
+2. ProGuard       
+ProGuard是一个压缩、优化和混淆Java字节码（Java源代码通常被编译为字节码）文件的免费的工具，它可以删除无用的类、字段、方法和属性。可以删除没用的注释，最大限度地优化字节码文件。它还可以使用简短的无意义的名称来重命名已经存在的类、字段、方法和属性。常常在Android开发用于混淆最终的项目，增加项目被反编译的难度。             
+Unity发布安卓应用程序时，默认使用的就是ProGuard来进行处理最终的代码。
+
+3. R8       
+R8是相对ProGuard较新的Android混淆编译器，它可以尽可能的减小应用的大小，早期的Android Studio版本中，混淆编译器使用的是ProGuard执行编译时的代码优化，如果我们使用Android Gradle 3.4.0或更高版本构建项目时，不再使用ProGuard进行代码优化，而是采用R8编译器协同工作。       
+Android Sutdio 3.3版本开始，就使用R8作为代码压缩器来对代码进行混淆、压缩、优化了。        
+R8 相对 ProGuard来说，它可以更快地缩减代码，同时改善输出的大小。        
+Unity发布安卓应用程序时，我们可以选择`使用R8`混淆编译器进行发布处理。
 
 
 
