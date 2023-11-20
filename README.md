@@ -3,7 +3,7 @@ Unity版本：2021.3.11f1
 
 # 1. 发布相关
 
-## 1.1 旧版发布准备（2019以下）
+## 1.1 Unity旧版发布准备（2019以下）
 
 Unity2019版本在编辑器模块可以一键添加。         
 以下是2019以下版本手动添加SDK和NDK的流程         
@@ -40,7 +40,7 @@ Preferences——>External Tools——>Android
 >***挖坑***:目前出现了打包卡在`Building Gradle project`的问题，构建失败，大致为版本问题，自己布置时没有完全使用教程上的文件。      
 深入了解再解决
 
-## 1.2 发布设置
+## 1.2 Unity发布设置
 
 ### 1. Android
 
@@ -246,17 +246,51 @@ C# 中的不安全代码不一定是危险的，只是 CLR 无法验证该代码
 ### 9. OtherSettings-优化相关
 |名称|说明|作用|
 |--|--|--
-|||
-|||
+|Prebake Collision Meshes|预烘焙碰撞到网格|启用该选项可以在构建时将碰撞数据添加到网格
+|Keep Loaded Shaders Alive|保持加载的着色器的活动状态|启动后，不能卸载着色器。着色器加载时会造成性能开销，可能会出现卡顿现象，不允许卸载着色器可以避免卸载后重复加载
+|`Preloaded Assets`|预装资源|设置启动时加载的资源数组，将想要预加载的内容拖入框中
+|`Strip Engine Code`|剥离引擎代码|选择IL2CPP模式才会出现的字段。能够删除Unity引擎功能中没有使用的代码，可以有效的减小包体大小
+|`Managed Stripping Level`|管理剥离水平|`Disabled`：不剥离，只有在Mono模式下才能选择。`Minimal`：最小剥离，Unity只会搜索Unity引擎未使用的.Net类库，不会删除任何用户编写的代码，该设置基本不会出现意外剥离，在使用IL2CPP模式后，该模式是默认模式。`Low`：低级剥离，处理Unity相关，玩家自己编写的代码也会被剥离，会尽量减小意外剥离发生。`Medium`：中级剥离，比起Low更多一些剥离。`High`：高级剥离，优先考虑打包大小，会最大限度剥离代码。可以采配合`link.xml`来手动拒绝剥离，或使用`[Preserve]`特性（在不希望被剥离的函数前加该特性）。一般Minimal足够
+|Enable Internal Profiler|(弃用)启用内部探查器|用此选项以从Android SDK的设备中获取profiler数据adblogcat测试项目时输出。这仅在开发版本中可用。
+|`Vertex Compression`|顶点压缩|选择要设置的通道，以便在顶点压缩方法下压缩网格。通常，顶点压缩用于减少内存中网格数据的大小，减小文件大小，提高CPU性能。
+|`Optimize Mesh Data`|优化网格数据|构建时会从使用的网格中剥离未使用的顶点属性。如果启用了该设置，运行时就`不能更改材质或着色器相关设置`，该选项会删除切换前无用的信息，导致切换后会无法访问丢失的数据
+|`Texture MipMap Stripping`|贴图纹理剥离|在构建时会从纹理中剥离没有使用的纹理贴图。会根据你发布平台的质量设置进行比较来确定哪些贴图用不到。`mipmap`生成的多分辨率图也会被剥离
+|`Stack Trace`|堆栈跟踪|选择在特定的上下文中允许的日志记录类型,可以选择日志记录的方式,None：不记录,ScriptOnly：只在运行脚本时记录信息,Full：一直记录
+|**Legacy**|以前的内容|
+|Clamp BlendShapes（Deprecated）|骨骼蒙皮动画中钳制混合形状权重的范围|
+
 
 
 ### 10. Publishing Settings
-|名称|说明|作用|
+|名称|简介|说明|
 |--|--|--
-|||
-|||
-|||
-
+|**Keystore Manager**|密钥管理器|
+|Create New|创建新的密钥库|`Anywhere`：默认在项目根目录。`In Dedicated Location`：默认在文档文件夹
+|Select Existing|选择现有密钥库|默认在项目根目录
+|Password|密钥库密码|加载和创建都需要输入
+|**New Key Values**|创建新键|
+|Alia|密钥的标识名字|
+|Password|密钥的密码|
+|Validity（years）|有效期（年）|可通过密钥管理应用程序的有效时间
+|First and Last Name|姓名|
+|Organizational Unit|组织单位|所处部门
+|Organization|组织|一般是公司名
+|City Or Locality|城市或地区|
+|State or Province|州或省|
+|Country Code（XX）|国家代码|中国的国家代码为：86
+|**Build**|构建|
+|`Custom Main Manifest`|自定义主清单文件|决定一些权限设置（比如：网络、定位、拍照等权限配置），还可以设置是否启用一些安卓功能等等
+|Custom Launcher Manifest|自定义启动器清单|我们可以在此决定一些应用程序启动之前的外观和行为。（比如：图标、名称、安装位置等等）
+|Custom Main Gradle Template|自定义主Gradle构建模板|Gradle 是一个构建系统，可自动执行许多构建过程并防止许多常见的构建错误。Unity将Gradle用于所有Android版本。您可以在Unity中构建输出包（.apk，.aab），也可以从Unity导出Gradle项目，然后使用Android Studio等外部工具构建它。是一个gradle文件，包含有关如何将Android应用程序构建为库的信息
+|Custom Launcher Gradle Template|自定义启动器Gradle构建模板|是一个gradle文件，包含有关如何构建Android应用程序的说明
+|Custom Base Gradle Template|自定义基础Gradle构建模板|是一个gradle文件，包含在所有其它模板和Gradle项目之间的共享配置
+|Custom Gradle Properties Template|自定义属性Gradle构建模板|属性文件，包含Gradle生成环境的配置设置。比如 ：JVM（Java虚拟机）内存配置，允许Gradle使用多个JVM构建的属性，用于选择进行缩小的工具的属性，构建应用程序包时不压缩本机库的属性等等
+|Custom Proguard File|自定义Proguard文件|如果缩小删除了一些应该保留的Java代码，你可以添加一条规则来将这些代码保留在此文件中
+|**Minify**|代码缩减|会加长发布时间，并且还会让调试变得复杂，所以一般在最终发布时才会使用。
+|Use R8||默认情况下，Unity 使用 Proguard 进行缩小。启用此复选框可改为使用 R8。
+|`Release`||如果希望 Unity 在发布构建中缩小应用程序的代码，请启用此复选框。
+|Debug||如果希望 Unity 在调试构建中缩小应用程序的代码，请启用此复选框。
+|`Split Application Binary`|拆分应用程序二进制文件|将输出包拆分为主包 (APK) 和扩展包 (OBB) 包。如果要发布大于 100 MB 的应用程序，则 `Google Play` 应用商店需要此功能。
 
 #### 拓展知识
 
@@ -307,6 +341,19 @@ R8 相对 ProGuard来说，它可以更快地缩减代码，同时改善输出�
 Unity发布安卓应用程序时，我们可以选择`使用R8`混淆编译器进行发布处理。
 
 
+## 1.3 AndroidStudio打包
+
+### 1.导出Gradle
+
+      1. 设置基本游戏信息：公司名，游戏名，图标，包名等
+      2. Build Settings勾选Export Project 
+      3. Export导出
+
+### 2.AndroidStudio打开项目
+
+打开项目时，优先使用AndroidStudio的SDK。
+Unity版本与Gradle需要注意版本匹配。           
+[Gradle for Android](https://docs.unity3d.com/Manual/android-gradle-overview.html)
 
 
 
