@@ -341,7 +341,7 @@ R8 相对 ProGuard来说，它可以更快地缩减代码，同时改善输出�
 Unity发布安卓应用程序时，我们可以选择`使用R8`混淆编译器进行发布处理。
 
 
-## 1.3 AndroidStudio打包
+## 1.3 AndroidStudio打包APK
 
 ### 1.导出Gradle
 
@@ -351,9 +351,50 @@ Unity发布安卓应用程序时，我们可以选择`使用R8`混淆编译器�
 
 ### 2.AndroidStudio打开项目
 
-打开项目时，优先使用AndroidStudio的SDK。
-Unity版本与Gradle需要注意版本匹配。           
-[Gradle for Android](https://docs.unity3d.com/Manual/android-gradle-overview.html)
+1. 打开项目时，优先使用AndroidStudio的SDK。
+
+2. 升级Gradle            
+AndroidStudio读取项目时会提醒升级构建工具，可能该版本并不合适。参考[Gradle for Android](https://docs.unity3d.com/Manual/android-gradle-overview.html)的兼容说明自行判断。         
+如果没有提醒，去File==>Project Structure==>Project处设置对应版本，并等待AS自动升级。            
+3. 修改配置文件         
+ Unity内置Gradle版本较低，导入AS时配置文件有老版本的信息，需要删除，避免影响打包。        
+项目根目录的`gradle.properties`配置文件删除`android.enableR8=false`。
+因为新版本Gradle默认使用R8，此时配置文件没有该字段。
+4. 构建包       
+`Build`==>`Build Bundle/APK`==>`Build APK`            
+此时可能提示SDK Tools版本不匹配，可以使用AS自己的路径，或者更新SDK。
+5. 发布APK        
+构建成功后，`Build`==>`Generate Signed Bundle or APK`==>`APK`             
+密钥选择Unity中创建的密钥库，发布可以选择`release`和`debug`两种版本
 
 
+## 1.4 调试
+
+### 1. Unity连接调试
+
+#### 1.1 手机准备 
+手机开启`开发者模式`，并开启`USB调试`     
+
+#### 1.2 Unity设置            
+1. `Build Settings`==>`Android`==>`Run Device`刷新后可以选择连接的手机           
+2. 勾选`Development Build`开启开发模式构建            
+3. `Autoconnect Profiler`自动连接分析器
+4. `Deep Profiling`深度剖析         
+5. `Script Debugging`脚本调试       
+6. `Wait For Managed Debugger`开启断点调试      
+7. 项目名称，包名，公司名，密钥库等确认是否设置       
+               
+#### 1.3 开始调试       
+1. 在`Build Settings`==>`Build And Run`         
+选择打包路径，Unity将包自动传入手机       
+2. 漫长的打包之后，手机需要确认安装
+3. 安装完成后，手机会弹窗提示是否等待断点调试
+4. 如果需要断点调试，先选择VS的`调试`==>`附加Unity调试程序`选择手机设备
+5. 点击手机上的确认，开始运行项目
+6. 如果需要使用`Profiler`一定要**关闭防火墙**！！！如果还不行，就试试[Android真机调试](https://blog.csdn.net/qq_34256136/article/details/132911781?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-132911781-blog-88406754.235%5Ev38%5Epc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-132911781-blog-88406754.235%5Ev38%5Epc_relevant_sort_base3&utm_relevant_index=5)中的方法
+
+#### 1.4 Unity Remote
+
+
+#### 1.5 Android Logcat 
 
