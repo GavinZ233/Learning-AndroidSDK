@@ -391,10 +391,200 @@ AndroidStudio读取项目时会提醒升级构建工具，可能该版本并不�
 3. 安装完成后，手机会弹窗提示是否等待断点调试
 4. 如果需要断点调试，先选择VS的`调试`==>`附加Unity调试程序`选择手机设备
 5. 点击手机上的确认，开始运行项目
-6. 如果需要使用`Profiler`一定要**关闭防火墙**！！！如果还不行，就试试[Android真机调试](https://blog.csdn.net/qq_34256136/article/details/132911781?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-132911781-blog-88406754.235%5Ev38%5Epc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-132911781-blog-88406754.235%5Ev38%5Epc_relevant_sort_base3&utm_relevant_index=5)中的方法
+6. 如果需要使用`Profiler`一定要**关闭防火墙**！！！如果还不行，就试试[Android真机调试](https://www.cnblogs.com/fengxing999/p/9958593.html)中的方法
 
 #### 1.4 Unity Remote
 
+1. 手机下载`Unity Remote`     
+2. `Project Settings`==>`Editor`==>`Device`==>`Any Android Device`      
+3. 手机连接电脑并打开USB调试，打开`unity Remote`
+4. 电脑运行项目，手机端会有投影，并且可以响应手机端的反馈(触屏，GPS，陀螺仪等)
+
+>如果电脑插入多个设备时，会自动选择第一台设备。             
+Unity Remote仅为了快速测试输入功能以及表现效果，节省测试的打包时间
 
 #### 1.5 Android Logcat 
+Android Logcat是Unity的一个拓展包         
+在Unity2019.4版本进入PackageManager搜索安装
+##### 1. 功能     
+1. 安卓日志打印信息
+2. 安卓应用程序内存统计
+3. 安卓屏幕截图
+4. 安卓屏幕录像
+5. 堆栈跟踪
+
+##### 2. 界面介绍
+1. `Auto Run` 自动运行
+2. `No device` 设备选择，点开选择目标设备
+3. `No Filter` 过滤选择器，指定连接设备上显示消息的应用程序
+4. `过滤输入框` 输入搜索内容，可以在下方的`Priority`对消息进行二级过滤
+5. Priority 优先级      
+ Verbose：所有  
+Debug：调试信息   
+Info：信息  
+Warn：警告  
+Error：错误       
+Fatal：致命的     
+6. Filter Options 过滤器选项              
+Use Regular Expressions：使用正则表达式         
+Match Case：区分大小写        
+7. Reconnect：重新连接
+8. Disconnect：断开和设备的连接           
+9. `Tools`：工具相关          
+Screen Capture：屏幕捕获        
+Open Terminal：开放终端 直接进入路径`SDK\platform-tools`         
+Stacktrace Utility：堆栈跟踪应用程序             
+Memory Window：内存窗口
+跟踪为应用程序分配的内存
+1.   `消息日志`             
+Time:消息产生的时间       
+Pid：生成消息的进程ID   
+Tid：生成消息的线程ID   
+Priority：消息的优先级        
+Tag：消息相关联的标签   
+Message：消息文本             
+**右键日志目录可以设置显示内容**
+
+##### 3. Screen Capture
+路径:    Android Logcat==>Tools==>Screen Capture       
+提供给测试人员记录bug的工具。       
+功能分为`截图`和`录屏`        
+
+下方为大致按钮布局 
+|设备ID|切换截图和录屏|开始/停止捕获|打开文件|另存|
+|--|--|--|--|--|
+|时长限制|
+|视频尺寸|默认是设备屏幕分辨率
+|比特率|默认值
+|显示器ID|没必要设置
+
+
+
+##### 4. Stacktrace Utility
+适用于非连接调试，获取了安卓崩溃日志时翻译日志 
+
+下方为大致按钮布局 
+|原始日志|解析后的日志|解析日志|
+|--|--|--|
+|||配置正则表达式(一般不动)
+|||`配置符号路径`
+
+>未配置的情况下，直接翻译日志会报错，需要点击`Configure Symbol Paths`配置符号路径，在弹出的`Android Logcat Settings`的`Symbol Paths`点击`+`选择Unity版本，打包方式和cpu版本，会配置默认应库文件的路径
+
+库文件包含3个重要包文件为:          
+libmain.so        
+libunity.so             
+libil2cpp.so(il2cpp模式时需要使用)              
+so文件相当于就是windows下的dll库文件，里面包含所有代码信息
+想要进行翻译就必须设置so文件的路径
+我们可以使用默认的，也可以自己导出选择导出的so文件。        
+在`Build Settings`中勾选`Create symbols.zip`时，会在构建APK时创建一份so文件压缩包         
+项目逻辑被转成os库后，出错时的日志属于安卓日志，逻辑无法辨识，可以让Unity参考so库文件，寻找到日志对应信息，并以Unity日志的形式展示出来
+
+
+##### 5. Memory Window
+`Auto Capture`：自动捕获
+Unity会定期捕获应用程序的内存快照
+注意：自动捕获，可能会影响性能表现，可能会造成卡顿，如果严重影响测试，建议使用手动捕获
+
+`Manual Capture`：手动捕获
+通过点击按钮，自己手动捕获内存快照
+
+|Group|名称|作用|
+|--|--|--|
+|Resident Set Size|常驻集大小|应用程序在运行时内存中分配的内存总量
+|`Proportional Set Size`|比例集大小|应用程序主动使用的运行时内存总量
+|`Heap Alloc`|堆分配|应用程序使用Java分配器和本机堆分配的内存总量。当检查内存泄露时，通过它可以进行很好的分析
+|Heap Size|堆大小|应用程序保留的总内存，总是大于堆分配
+
+内存图例:         
+NativeHeap:本地堆       
+JavaHeap:Java分配器堆         
+Code:代码         
+Stack:栈          
+Graphics:图形相关       
+PrivateOther:其它私有的       
+System:系统       
+Total:总共的            
+
+#### 1.6 ADB调试
+##### ADB是什么
+ADB是 Android Debug Brige（安卓调试桥）的简称   
+它是我们调试Android设备的一套指令集       
+它可以让我们通过指令来进行一些操作，来获取日志信息    
+比如：      
+1.关机、重启      
+2.安装、启动、卸载应用程序    
+3.删除、移动、复制文件  
+4.查看日志信息    
+Android Logcat工具其实就是利用了ADB来获取的信息
+
+
+##### 使用ADB
+
+在`Android Logcat`==>`Open Terminal`自动打开cmd并定位到当前SDK路径下，可以使用adb相关指令          
+如：        
+显示日志信息      adb logcat    
+获取Unity相关日志信息   adb logcat -s Unity         
+更多指令访问[ADB详细介绍](https://developer.android.com/studio/command-line/adb.html)     
+
+
+### 2 Android Studio调试
+
+在前面将项目导出的基础上，手机打开USB调试，AS先Build项目确保可运行，再到右上角选择设备，`Run`==>`Run launcher`，会将项目打包并发布到设备上，运行后，AS下方有Logcat和Profiler，与Unity内部的两个工具类似。         
+非老项目，一般会选择Unity内部的工具
+
+
+
+以下是Developers提供的教程          
+[探索 Android Studio](https://developer.android.google.cn/studio/intro?hl=zh-cn)    
+[调试应用](https://developer.android.google.cn/studio/debug?hl=zh-cn)         
+[分析应用性能](https://developer.android.google.cn/studio/profile?hl=zh-cn)
+
+
+# 2. Java快速入门
+此处记录会较潦草，仅记录与C#的差异
+
+## 1.准备阶段           
+### 1.1. 环境
+JDK与环境变量在Lua的环境准备已经做过，略
+
+### 1.2. IDE安装
+在学校用的是Eclipse，此处使用IDEA   
+[IDEA Community Edition](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC)
+
+安装时，Create Associations勾选`.java``.kt``.kts`           
+创建项目时，可以在`JDK`找到Unity用的JDK
+
+IDEA可以装插件,`File`==>`Settings`==>`Plugins`       
+
+设置文件编码`File`==>`Settings`==>`Editor`==>`Code Style`==>`File Encodings`上下两个都选UTF-8
+
+
+## 2. 语法
+
+### 1. 注释
+
+C#中的
+
+      /// <summary>
+      /// 函数名
+      /// </summary>
+      /// <param name="id">入参名</param>
+在Java中
+
+    /**
+     * 函数名
+     * @param args 入参名
+     */
+
+其他的：`//`  `/**/` 通用
+
+### 2. 变量
+
+### 3. 字符串操作
+
+
+
+
 
