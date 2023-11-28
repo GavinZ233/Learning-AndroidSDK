@@ -543,7 +543,7 @@ Android Logcat工具其实就是利用了ADB来获取的信息
 
 
 # 2. Java快速入门
-此处记录会较潦草，仅记录与C#的差异
+**此处记录会较潦草，仅记录与C#的差异**
 
 ## 1.准备阶段           
 ### 1.1. 环境
@@ -581,8 +581,145 @@ C#中的
 其他的：`//`  `/**/` 通用
 
 ### 2. 变量
+#### 1. 无符号       
+Java中没有uInt，uFloat这种无符号值，Java8加入了可转换至无符号的方法，但少用。       
+#### 2. boolean        
+单个boolean在编译时，使用int类型，在数组中使用字节数组，占一个字节。          
 
-### 3. 字符串操作
+#### 3. 常量           
+C#关键字const         
+Java关键字finel       
+
+#### 4. 类型转换       
+1. 隐式转换             
+byte->short->char->int->long->float->double
+2. 显式转换             
+parseInt("转换内容"，内容是几进制)，只填内容默认算10进制。
+
+            int i=Integer.parseInt("231",8);
+
+
+
+### 3. 运算符
+
+Java有无符号右移`>>>`，右移后左侧补0   
+`>>`在右移后，左侧会根据上一个数补充，1000==>1100       
+在`>>>`的效果是 1000==>0100     
+
+### 4. 条件语句
+
+#### switch
+
+C#的`switch`在贯穿时，被贯穿的case不能包含自己的逻辑        
+
+        switch (id)
+            {
+                case "1":
+                case "2":
+                case "3":
+                    print(1);
+                    break;
+            }
+
+而Java中的可以          
+
+        switch (a)
+        {
+            case    1:
+                System.out.println(1);
+            case    2:
+                System.out.println(2);
+            case    3:
+                System.out.println(3);
+                break;
+        }
+
+
+#### foreach
+
+Java中的foreach，通过for达成同样的操作        
+编辑器中输入`foreach`，会快捷输入一个for循环，参数内容可参考C#中的foreach
+
+        for (var item:items) {
+        }
+此时的for就是一个C#中的foreach了，通过迭代器获取容器内容
+
+
+
+
+### 5. 数组
+
+Java中的声明可以是：int arr[];   
+int[] arr;
+而C#中只能:int[] arr;
+
+#### Arrays类
+是对数组操作的类        
+1. 填充元素       
+Arrays.fill(数组，填充值)       
+Arrays.fill(数组，起始索引，结束索引，填充值)索引左闭右开
+
+
+2. 排序     
+Arrays.sort(数组),默认是升序排序
+
+3. 复制     
+Arrays.copyOfRange(被复制数组，起点索引，终点索引)左闭右开      
+Arrays.copyOf(被复制数组，复制长度)         
+
+
+4. 查询     
+Arrays.binarySearch(数组，搜索元素)      
+Arrays.binarySearch(数组，开始索引，结束索引，搜索元素)索引左闭右开      
+此方法是对数组进行二分查找，需要先排序           
+   
+
+### 6. 函数
+
+1. Java中没有`ref`和`out`关键字        
+
+2. Java中函数入参没有默认参数
+
+3. Java函数命名采用驼峰命名法，C#采用帕斯卡命名法       
+
+
+4. Java可变参数写法不同     
+
+        public void testFun(String... strs) {
+        }
+
+
+### 7. 类       
+
+#### 基础
+
+1. 无成员属性，需要使用时，自己声明getset方法，或者使用ide内置的快捷设置生成方法。  
+
+2. finalize和C#中的析构函数类似，在gc时执行
+
+3. 没有索引器
+
+4. 不能运算符重载   
+
+#### 继承
+
+1. 继承不是`:`，是`extends`
+2. `getType()`换成`getClass`
+3. 里氏替换同理
+4. `final`密封关键字同理，都不能被继承、重写、修改      
+5.  Java中没有`virtual`和`override`关键字
+6. Java中也有`abstruct` 
+7. 接口     
+可以声明字段，字段为`static`和`final`,静态常量      
+继承接口的关键字是`implements`      
+Java中不同接口的同名方法共享重写方法，C#中两个接口有同名方法时，需要显示实现接口。
+
+
+#### 包     
+类似C#的命名空间        
+1. 包名全小写，用`.`分割
+2. 
+
 
 
 
