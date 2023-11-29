@@ -700,6 +700,10 @@ Arrays.binarySearch(数组，开始索引，结束索引，搜索元素)索引�
 3. 没有索引器
 
 4. 不能运算符重载   
+5. Java没有as关键字
+6. `is`关键字在Java中是`instanceof`
+
+
 
 #### 继承
 
@@ -708,8 +712,9 @@ Arrays.binarySearch(数组，开始索引，结束索引，搜索元素)索引�
 3. 里氏替换同理
 4. `final`密封关键字同理，都不能被继承、重写、修改      
 5.  Java中没有`virtual`和`override`关键字
-6. Java中也有`abstruct` 
-7. 接口     
+6.  Java中的`base`关键字是`super`
+7. Java中也有`abstruct` 
+8. 接口     
 可以声明字段，字段为`static`和`final`,静态常量      
 继承接口的关键字是`implements`      
 Java中不同接口的同名方法共享重写方法，C#中两个接口有同名方法时，需要显示实现接口。
@@ -718,10 +723,124 @@ Java中不同接口的同名方法共享重写方法，C#中两个接口有同�
 #### 包     
 类似C#的命名空间        
 1. 包名全小写，用`.`分割
-2. 
+2. 与命名空间不同的是，命名空间对脚本位置没有要求，只需要声明属于哪个namespace即可，脚本属于哪个包就要声明在包内，脚本也在该包的文件夹内        
+3. 对包的使用，和命名空间类似 `import xxxx.xxxx.xxx.引入的类`,全部引入就是`import xxxx.xxxx.xxx.*`
+4. 静态导入`import static java.lang.System.*;`，System类下的静态方法可以直接调用。
+      
+#### 内部类     
+1. Java中的内部类创建，需要先创建外部类，才能创建内部类        
+
+        Outer outer=new Outer();
+        Outer.Inner inner=outer.new Inner();
+
+2. 内部类可以使用外部类的成员变量，即使是private
+3. 同名成员通过`this`和`外部类.this`区分        
+>C#中的内部类更像被写在外部类里的独立类，而Java中的内部类属于外部类可以与外部类交互     
+4. 匿名内部类可重写父类的方法       
+
+        //外部类
+        public class Outer{
+            public void Eat(){
+
+            }
+        }
+        //匿名内部类
+        Outer outer2=new Outer(){       
+            public void Eat(){      
+                //覆写逻辑      
+            }       
+        }
 
 
+### 8. String
 
+#### 1. 字符串声明
+
+Java在代码中直接赋值字符串时，同样字符串内容的string使用的内存地址是相同的，即Java只创建了一个空间，让重复的string指向一个地址。        
+而通过string的构造方法写入的字符串即使内容相同也会开辟两个新的内存空间分别存储。
+
+#### 2. 常用方法
+
+1. 比较     
+   对比引用地址时，使用`==`     
+   对比内容时，使用`equals`方法     
+   还有忽略大小写的比较方法`equalsIgnoreCase`
+
+2. 去除首尾空格,`String.trim()`，仅去除字符串首尾的空格
+3. 判断字符串开头和结尾字符
+   
+        boolean yes =str.startsWith("头部文本")；   
+        boolean yes =str.endsWith("尾部文本")；
+
+4. 字符串格式化     
+   String str=String.format(" %b ",b);    
+
+   |占位符|适用格式|
+   |--|--|
+   |%b、%B|boolean类型格式化符号|
+   |%s、%S|String类型格式化符号
+   |%c、%C|char类型格式化符号
+   |%d|十进制数格式化符号
+   |%o|八进制数格式化符号
+   |%x、%X|十六进制数格式化符号
+   |%e|十进制数的科学计数法格式化符号
+   |%tF|年-月-日 时间格式
+   |%tD|月/日/年 时间格式
+   |%tc|全部日期和时间信息
+   |%tr|时:分:秒 PM(AM) 时间格式
+   |%tT|时:分:秒 24小时制 时间格式
+   |%tR|时:分 24小时制 时间格式       
+
+5. Java也有StringBuilder    
+   使用方法和C#同理     
+
+        StringBuilder sb=new StringBuilder();
+        sb.append("拼接内容");      
+        sb.insert(插入索引,"插入内容");     
+        sb.delete(删除起点,删除终点);//同样是左闭右开     
+        String str =sb.toString();      
+
+
+### 9. 泛型     
+
+1. 不能写类型，要写该类的封装类     
+   
+   TestT<Ingeter> tt=new TestT<Ingeter>();
+
+2. 泛型方法的泛型入参书写位置不同
+   
+       public<T>  void  Test2(T t)
+
+3. 泛型方法调用时不用额外填写类型
+
+        tt.Test2("入参");
+
+4. 泛型约束
+
+       public<T extends Father>  void  Test2(T t)
+
+5. 类型通配符   
+   可以在声明泛型类时不填写类型，使用通配符`?`占位，使用时再填入类型。
+
+6. 约束可以使用时再声明     
+   妹整明白，回头再看链接[Java?通配符](https://blog.csdn.net/qq_40587575/article/details/78858249)
+
+        TestT<? extends Father> tt=null;
+        tt=new Test<Son>();
+
+
+### 10. ArrayList和LinkedList
+两者类似C#的List和LinkedList
+
+1. 当ArrayList中存储的是int时，调用remove(value)只能将value当作索引来处理
+2. 使用迭代器       
+   
+        //得到迭代器
+        Iterator<Interger> it=list.iterator();
+        //判断是否可迭代
+        while(it.hasNext()){
+            System.out.println(it.next());
+        }
 
 
 
