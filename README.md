@@ -545,11 +545,11 @@ Android Logcat工具其实就是利用了ADB来获取的信息
 # 2. Java快速入门
 **此处记录会较潦草，仅记录与C#的差异**
 
-## 1.准备阶段           
-### 1.1. 环境
+## 2.1 准备阶段           
+### 1. 环境
 JDK与环境变量在Lua的环境准备已经做过，略
 
-### 1.2. IDE安装
+### 2. IDE安装
 在学校用的是Eclipse，此处使用IDEA   
 [IDEA Community Edition](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC)
 
@@ -561,7 +561,7 @@ IDEA可以装插件,`File`==>`Settings`==>`Plugins`
 设置文件编码`File`==>`Settings`==>`Editor`==>`Code Style`==>`File Encodings`上下两个都选UTF-8
 
 
-## 2. 语法
+## 2.2 语法
 
 ### 1. 注释
 
@@ -841,6 +841,474 @@ Java在代码中直接赋值字符串时，同样字符串内容的string使用�
         while(it.hasNext()){
             System.out.println(it.next());
         }
+
+### 11. HashMap和TreeMap
+
+使用方式和C#的字典差不多，一个是哈希表一个是树。因为两者的特性，键都有唯一性，但TreeMap的键不能为空                     
+如果忘了哈希表和树的知识                
+[哈希表](https://www.hello-algo.com/chapter_hashing/hash_map/)          
+[树](https://www.hello-algo.com/chapter_tree/binary_tree/)
+
+
+### 12. 异常捕获            
+和C#类似                
+
+        try {
+            //异常捕获代码块
+        }
+        catch (Exception ex){
+            //捕获异常信息
+            ex.getMessage();
+        }
+        finally {
+            //不管前面是否执行，finally都能继续
+            //除非该程序退出或者线程被销毁
+        }
+
+
+1. 创建自定义异常捕获类        
+
+        public class MyException extends  Exception{
+                public int num;
+                public MyException(String str){
+                        //将str传给基类构造方法
+                        super(str);
+                }
+        }
+
+2. 使用自定义异常捕获类            
+
+        try{
+            int i=1;
+            int targetNum=5;
+            if (i<targetNum) {
+                //创建类
+                MyException me=new MyException("数小了");
+                me.num=targetNum-i;
+                //抛出
+                throw me;
+            }
+        }
+        //捕获
+        catch (MyException ex){
+            System.out.println(ex.getMessage()+"  比目标数值小"+ex.num);
+        }
+
+
+3. 在方法中抛出异常     
+   
+        //在方法后面提前抛出异常
+        public static   void  TryException() throws ArrayIndexOutOfBoundsException
+        {
+
+        }
+        //捕获异常
+        try {
+            TryException();
+        }
+        catch (ArrayIndexOutOfBoundsException ae){
+            System.out.println("索引超出范围");
+        }
+
+### 13. Lambda
+基本结构        
+ `(参数)->{逻辑}`       
+单行逻辑时      
+ `(参数)->逻辑`       
+
+Java中没有委托，但提供了函数式接口
+
+创建接口        
+
+        interface  ITest{
+                String Test();
+        }
+使用    
+
+        ITest t=()->"反参";
+        System.out.println(t.Test());
+>注意！！！此时接口只能声明一个方法             
+
+lambda表达式不能修改函数局部变量，被lambda使用的变量对lambda来说是final             
+lambda可以修改类成员变量的值
+
+
+        public   class  LambdaTest{
+                //可以修改可以使用
+                public  int classNum=1;
+                public  void  TestFun(){
+                        //不可修改可以使用
+                        int funNum=3;
+                        ITest it=()->{
+                                classNum=6;√
+                                funNum=6;×
+                                return null;
+                        };
+                }
+        }
+
+
+### 14. 方法引用
+函数式接口可以接收匿名函数那么自然也可以接收类的方法。          
+使用方式类似C#中的委托
+
+ 1. 接收静态方法：  
+函数式接口 name=目标类`::`目标方法
+
+        //声明接口=该类的静态方法Test
+        ITest01 it=LearnFun::Test;
+        //通过该接口的方法调用被记录的Test方法
+        it.fun();
+
+2. 接收成员方法         
+函数式接口 name=已实例化的目标类`::`目标方法
+
+        LearnFun lf=new LearnFun();
+        ITest01 it2=lf::Test2;
+        it2.fun();
+
+
+3. 接收泛型方法                 
+此时的接口声明也是泛型          
+函数式接口<泛型类> name=目标类`::`目标方法
+
+        interface  ITest03<T>{
+                void  fun(T t);
+        }
+        //使用
+        ITest03<Integer> iTest03=LearnFun::GenericFUn;
+        iTest03.fun(32);
+
+
+
+
+
+### 15. Function接口
+和C#一样，自己动手声明一堆委托太麻烦了，官方有封装好的Function          
+
+
+
+        Function<Integer,String> function= (i)->{
+            return  i.toString();
+        };
+
+### 16. 常用类库
+
+#### 1. Number类      
+`Number`是Byte Integer Short Long Float Double类的父类
+主要方法：
+
+                byteValue()  以byte形式返回指定的数值
+                intValue()   以int形式返回指定的数值
+                floatValue() 以float形式返回指定的数值
+                shortValue() 以short形式返回指定的数值
+                longValue()  以long形式返回指定的数值
+                doubleValue()  以double形式返回指定的数值
+
+
+#### 2. Integer类      
+它和Byte、Short、Long三个封装类方法基本相同
+主要方法：
+
+           parseInt(String str)                  将字符串转数值
+           toString()                            将数值转字符串
+           toBinaryString(int i)                 以二进制无符号整数形式返回一个整数参数的字符串表示形式
+           toHexString(int i)                    以十六进制无符号整数形式返回一个整数参数的字符串表示形式
+           toOctalString(int i)                  以八进制无符号整数形式返回一个整数参数的字符串表示形式
+           equals(Object integerObj)             比较两个对象是否相等
+           compareTo(Integer anotherInteger)     比较两个Integer对象，相等返回0；调用函数对象小于传入对象，返回负数；反之，返回正数
+
+
+#### 3. Double类      
+它和Float类的方法基本相同               
+主要方法：
+
+           parseDouble(String str)               将字符串转数值
+           toString()                            将数值转字符串
+           isNaN()                               如果该double值不是数字，返回true，否则返回false
+           compareTo(Double d)                   和Integer类中方法作用一致
+           equals(Object doubleObj)              和Integer类中方法作用一致
+           toHexString(double d)                 返回double参数的十六进制字符串表示形式
+
+#### 4. Boolean类
+
+           equals(Object obj)                    和Integer类中方法作用一致
+           parseBoolean(String s)                将字符串转Boolean
+           toString()                            将数值转字符串
+           valueOf(String s)                     返回一个用指定的字符串表示的boolean值
+
+
+#### 5. Character类
+
+           compareTo(Character anotherCharacter) 比较两个Character对象，若两个对象相等则返回0
+           equals(Object obj)                    和Integer类中方法作用一致
+           toString()                            转字符串
+           toUpperCase(char ch)                  将字符转大写
+           toLowerCase(char ch)                  将字符转小写
+           isUpperCase(char ch)                  判断字符是否是大写
+           isLowerCase(char ch)                  判断字符是否是小写
+           isLetter(char ch)                     判断字符是否是字母
+           isDigit(char ch)                      判断字符是否为数字
+
+
+#### 6. BigInteger
+该类主要用于存储任意大小的整数，也就是说它可以表示任何大小的整数值而不会丢失信息                
+因为传统的整形类型都有最大最小区间，而该类没有，主要用于存储大数据      
+主要方法：
+
+           add(BigInteger val)               加法
+           subtract(BigInteger val)          减法
+           multiply(BigInteger val)          乘法
+           divide(BigInteger val)            除法
+           remainder(BigInteger val)         取余
+           pow(int exponent)                 计算exponent次方
+           negate()                          取反
+           shiftLeft(int n)                  左移n位
+           shiftRight(int n)                 右移n位
+           and(BigInterger val)              位与
+           or(BigInteger val)                位或
+           compareTo(BigInteger val)         比较，类似Integer中
+           equals(Object x)                  判断数值是否相等
+           min(BigInteger val)               取最小
+           max(BigInteger val)               取最大、
+
+
+#### 7. BigDecimal
+该类和BigInteger用于表示大数据，但是它主要用于表示浮点数（有小数点的数值）              
+它的主要方法和BigInteger类似
+
+#### 8. Math类
+ 主要方法：
+
+
+三角函数                
+
+        sin(double a)                         正弦
+        cos(double a)                         余弦
+        tan(double a)                         正切
+        asin(double a)                        反正弦
+        acos(double a)                        反余弦
+        atan(double a)                        反正切
+        toRadians(double angdeg)              角度转弧度
+        toDegrees(double angrad)              弧度转角度
+
+
+指数            
+
+        exp(double a)                         获取e的a次方
+        log(double a)                         取自然对数
+        log10(double a)                       取底数为10的a的对数
+        sqrt(double a)                        取a的平方根
+        cbrt(double a)                        取a的立方根
+        pow(double a, double b)               取a的b次方
+
+取整    
+
+        ceil(double a)                        向上取整
+        floor(double a)                       向下取整
+        rint(double a)                        返回与a最接近的整数，如果有两个，取偶数
+        round(float a)                        将参数a加上0.5后返回与其最近的整数
+        rount(double a)                       将参数a加上0.5后返回与其最近的整数，然后强转为Long
+        
+其他            
+
+        max(参数1，参数2)                      最大值
+        min(参数1，参数2)                      最小值
+        abs(参数)                             绝对值
+
+
+#### 9. Random
+
+        Random r = new Random();              以当前系统时间作为随机数生成器种子
+        Random r = new Random(seedValue);     自己设置随机数种子
+        nextInt()                             返回一个随机整数
+        nextInt(int n)                        返回大于等于0且小于n的随机整数
+        nextLong()                            返回一个随机长整型
+        nextBoolean()                         返回一个随机布尔值
+        nextFloat()                           返回一个随机单精度浮点
+        nextDouble()                          返回一个随机双精度浮点
+        nextGaussian()                        返回一个概率密度为高斯分步的双精度浮点
+
+#### 10. 其他类         
+
+        Data：日期类 获取日期时间相关方法
+        Calendar：日历类 比起Date更加国际化
+        System:系统类 有获取当前时间的方法
+
+# 3. Unity与Android交互         
+
+## 3.1 Android相关介绍
+
+1. Android SDK   
+提供了用于开发Android应用程序的各种API和工具    
+2. 编程语言      
+使用Java或者Kotlin语言进行开发，他们提供了丰富的库和API 
+3. XML配置文件   
+Android应用程序使用XML来定义UI布局、样式和资源信息等    
+### 1. Android四大件 
+Android应用程序由四种组件组成： 
+1. Activity(活动)    
+主要用于实现用户界面，代表一个屏幕或窗口，包含了各种UI组件，按钮，文本，输入框等等
+2. Service(服务)        
+是一种可以在后台执行长时间运行操作的组件，没有用户界面，一般用于处理和交互无关的逻辑。          
+比如：上传、下载、音乐播放等
+
+3. Broadcast Receiver(广播接收器)       
+主要用于接受系统或者其他应用程序发出的广播消息。
+消息可以来自系统事件（比如网络连接变化、设备启动等），也可以来自其它应用程序
+4. Content Provider(内容提供程序)       
+用于管理应用程序数据，可以让其它应用程序或系统访问本应用中的数据，也可以让本应用访问其它应用或系统的数据。      
+比如用于存储应用程序数据，图片、音频、视频等
+
+我们接触的大部分都是Activity，类似在Unity中的UI模块，需要后台逻辑时，会使用另外三种组件
+
+### 2. AndroidManifest.xml文件的作用
+
+它是Android应用程序的应用清单文件       
+每个应用程序都必须包含一个，并且文件名必须是AndroidManifest.xml         
+该文件中包含了应用程序的配置信息，Android系统会根据该配置来运行应用程序
+
+该文件中包含的重要信息有：
+1. 应用程序包含的`四大组件`的内容（Activity,Service,Broadcast Receiver, Content Provider）
+2. 应用程序的`权限`（存储权限、互联网访问权限等等）
+3. 应用程序`元数据`（程序名称、版本号、图标、包名等等）
+4. 应用程序`启动信息`（默认启动哪一个Activity）
+
+常用标签作用：
+|标签|作用|
+|--|--|
+| manifest|主要包含包名、版本号等等|    
+| uses | permission：应用程序权限|
+| application|应用程序各组件包含在其中，还可以配置一些图标、文本、样式等等信息|
+| activity|Activity组件的具体信息|
+| meta-data|为Activity提供元数据，可以通过API获取该数据|
+|intent-filter|为组件声明意图(intent),其中还包含action(意图类型)和category(意图类别)两个子标签|
+
+
+### 3. jar与aar
+1. jar包包含Android项目中的脚本文件和清单文件，不包含资源文件，jar包导入其他工程后，可以引用源码，Eclipse打包一般是jar包        
+2. aar包是AndroidStudio下打包Android工程中的src(脚本文件),res(资源文件)，lib（库文件）生成的打包文件
+
+
+## 3.2 准备Android工程         
+此安卓工程只是提供逻辑，并不是完整的项目，需要删除多余的资源
+
+### 1. Unity创建工程设置好安卓包            
+并记录安卓包名    
+### 2. AndroidStudio创建工程        
+选择`Empty Views Activity`
+包名输入Unity工程设置的包名，语言选择Java，Minimum SDK选择与Unity中一致的版本
+### 3. 删除安卓项目多余的内容       
+项目切换成`Android`，删除`java`中带有`(test)(androidtest)`的java包，`res`是安卓项目自己的资源，也要删去无用的
+
+### 4. 修改`build.gradle`           
+项目切换成`Project`，从`app`打开`build.gradle`。        
+`id("com.android.application")`改成`id("com.android.library")`,         
+删除`applicationID`，如果同步报错，就按提示删除`versionCode`和`versionName`。        
+点右上角`Sync Now`同步
+
+### 5. 导入classes.jar
+路径：Unity安装目录\Data\PlaybackEngines\AndroidPlayer\Variations\mono(il2cpp)\Release\Classes
+
+1. 将包拷贝到AndroidStudio中的app\libs下
+
+2. 导入后 选择包 右键点击 Add As Library
+
+### 6. 导入UnityPlayerActivity
+2019版本以上需要本步骤          
+路径：Unity安装目录/Data/PlaybackEngines/AndroidPlayer/Source/com/unity3d
+将路径下的文件夹拷贝到AndroidStudio中的 app/src/main/java/com中
+
+### 7. 修改文件设置
+1. MainActivity         
+继承换成`UnityPlayerActivity`           
+注释onCreate函数中的setContentView代码
+2. 修改AndroidManifest          
+删除`application`中无用的内容，并修改`activity`         
+如下
+
+        <application>
+                <activity
+                android:name=".MainActivity"
+                android:exported="true">
+                <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+                <meta-data android:name="unityplayer.UnityActivity" android:value="true"/>
+                </activity>
+        </application>
+
+3. `Build`==>`Make Module`              
+可能出现报错`Recommended action: Update this project to use a newer compileSdk of at least 33, for example 34.`，根据提示修改complieSDk和targetSDK即可(Android的版本兼容问题真的太麻烦了)               
+构建成功后，`Project`==>`app`==>`build`==>`outputs`==>`aar`下有一个aar包
+
+### 8. 导入到Unity
+1. 上一步的aar包导入到Unity`Plugins`==>`Android`
+2. 将Android项目中的`AndroidManifest.xml`copy到Unity`Plugins`==>`Android`
+
+## 3.3 Unity调用安卓    
+
+### 1.C#调用AndroidJavaClass
+
+        //初始化交互类
+        using (AndroidJavaClass ajc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+                //获取Activity对象,此时获取的是MainActivity类对象
+                using(AndroidJavaObject ajo=ajc.GetStatic<AndroidJavaObject>("currentActivity"))
+                {
+                        //成员变量
+                        int i = ajo.Get<int>("testI");
+                        ajo.Set<int>("testI", 11);
+                        i = ajo.Get<int>("testI");
+                        //静态变量
+                        int staticI = ajo.GetStatic<int>("testStaticI");
+                        ajo.SetStatic<int>("testStaticI", 11);
+                        staticI = ajo.GetStatic<int>("testStaticI");
+                        //成员方法
+                        string funStr =ajo.Call<string>("TestFun");
+                        //静态方法
+                        string staticStr = ajo.CallStatic<string>("TestStaticFun");
+                }
+        }
+
+### 2. 打包项目
+ 
+1. 设置密钥     
+2. aar包删除多余内容      
+压缩工具打开aar，删除libs下的classes.jar，Unity自带，不删除会报错  
+以下无报错时不需要操作:             
+aar下的的`classes.jar`打开，进入到自己的包中找到项目名称的文件夹内有`MainActivity.class`，为避免报错可以删去。（目前没发现报错）        
+该路径下可能还有文件`BuildConfig.class`，报错也需要删去
+
+
+## 3.4 安卓调用Unity
+
+
+### 注意：         
+想要被Android端调用的Unity函数  
+1.需要写在`继承MonoBehaviour`的脚本中     
+2.需要挂载在场景中处于`激活状态`的GameObject上
+
+猜测：应该是使用UnityPlayer通过Find找到目标GameObject，拿到第一个脚本反射操作该脚本的目标方法
+### 交互方法    
+
+UnityPlayer.UnitySendMessage("GameObject名称", "函数名", "参数信息")
+> 注意：该API中的参数只能是String类型或者为null
+
+
+## 3.5 Unity嵌入Android
+
+### 1. 创建Activity
+
+`File`==>`New`==>`Activity`==>`Empty Views Activity`    
+设置Activity类名，此项目不是完整的安卓项目，不需要设置`Launcher Activity`               
+到`res`==>`layout`==>`activity_android`，或者通过创建的Activity类中的`setContentView`内容`activity_android`Ctrl点击也可以进入，打开UI编辑页面。
+
+
+
+
+
 
 
 
