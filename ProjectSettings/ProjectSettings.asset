@@ -249,8 +249,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 2800000, guid: ee148e281f3c41c5b4ff5f8a5afe5a6c, type: 3}
-  AndroidKeystoreName: "{inproject}: \u7A7F\u8D8A\u7C73\u7EBF.keystore"
-  AndroidKeyaliasName: testcall
+  AndroidKeystoreName: '{inproject}: android.keystore'
+  AndroidKeyaliasName: callbaidu
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1

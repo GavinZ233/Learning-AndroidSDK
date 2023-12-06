@@ -535,7 +535,6 @@ Android Logcat工具其实就是利用了ADB来获取的信息
 非老项目，一般会选择Unity内部的工具
 
 
-
 以下是Developers提供的教程          
 [探索 Android Studio](https://developer.android.google.cn/studio/intro?hl=zh-cn)    
 [调试应用](https://developer.android.google.cn/studio/debug?hl=zh-cn)         
@@ -1224,20 +1223,10 @@ Android应用程序由四种组件组成：
 继承换成`UnityPlayerActivity`           
 注释onCreate函数中的setContentView代码
 2. 修改AndroidManifest          
-删除`application`中无用的内容，并修改`activity`         
-如下
+在`manifest`最后添加`package="com.xx.xx"`具体的包名     
+删除`<application>`中的信息，
+在`intent-filter`下方添加`<meta-data android:name="unityplayer.UnityActivity" android:value="true"/>`      
 
-        <application>
-                <activity
-                android:name=".MainActivity"
-                android:exported="true">
-                <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                        <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
-                <meta-data android:name="unityplayer.UnityActivity" android:value="true"/>
-                </activity>
-        </application>
 
 3. `Build`==>`Make Module`              
 可能出现报错`Recommended action: Update this project to use a newer compileSdk of at least 33, for example 34.`，根据提示修改complieSDk和targetSDK即可(Android的版本兼容问题真的太麻烦了)               
@@ -1301,14 +1290,38 @@ UnityPlayer.UnitySendMessage("GameObject名称", "函数名", "参数信息")
 
 ### 1. 创建Activity
 
-`File`==>`New`==>`Activity`==>`Empty Views Activity`    
+`File`==>`New`==>`Activity`==>`Empty Views Activity`            
 设置Activity类名，此项目不是完整的安卓项目，不需要设置`Launcher Activity`               
+
 到`res`==>`layout`==>`activity_android`，或者通过创建的Activity类中的`setContentView`内容`activity_android`Ctrl点击也可以进入，打开UI编辑页面。
 
+拖拽一个按钮和文本，并拖动两个组件的对齐                    
+
+在`MainActivity`声明方法，调用新Activity                
+
+    public void OpenActivity(){
+        Intent intent=new Intent(this,AndroidActivity.class);
+        startActivity(intent);
+    }
+
+### 2. 嵌入Unity
+
+导出aar包，Unity通过`currentActivity`调用刚才的方法     
+
+Unity逻辑写完后，**导出**项目,到AndroidStudio中打包项目
 
 
 
+报错情况：      
+1. [opens java.io报错解法](https://blog.csdn.net/crasowas/article/details/130002017)       
+2. `Android resource linking failed`，指向新建的activity资源连接失败            
+ 构建aar包的项目根目录==>`build.gradle.kts`==>`dependencies`==>`implementation("androidx.constraintlayout:constraintlayout:2.1.4")`
+ 复制到构建项目==>`unityLibrary`==>`build.gradle`==>`dependencies`
+1. `This project uses AndroidX dependencies`    
+ 构建项目根目录==>`gradle.properties`在org下面添加`android.useAndroidX=true`
 
+>版本兼容太难搞了，暂时放弃     
 
+## 3.6 接入SDK     
 
-
+### 
